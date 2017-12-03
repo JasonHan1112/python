@@ -1,0 +1,55 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Dog	../class_test.py	/^class Dog():$/;"	kind:class	line:1
+Matplotlib_test	../class_test_matplotlib.py	/^class Matplotlib_test():$/;"	kind:class	line:8
+__init__	../class_test.py	/^    def __init__(self, name, age):$/;"	kind:member	line:2
+__init__	../class_test_matplotlib.py	/^    def __init__(self):$/;"	kind:member	line:10
+a	../python_hello.py	/^a = 0.1 * 4;$/;"	kind:variable	line:31
+a	../python_hello.py	/^a = 1 + 2;$/;"	kind:variable	line:28
+a	../python_hello.py	/^a = 3 * 2;$/;"	kind:variable	line:37
+a	../python_hello.py	/^a = 32;$/;"	kind:variable	line:151
+abb_assignment	../python_hello.py	/^abb_assignment = [value**2 for value in digit];$/;"	kind:variable	line:100
+alien_0	../python_hello.py	/^alien_0 = {"color": "green", "point": 5};$/;"	kind:variable	line:190
+alien_1	../python_hello.py	/^alien_1 = {"color": "green", "point": 10};$/;"	kind:variable	line:214
+alien_2	../python_hello.py	/^alien_2 = {"color": "black", "point": 20};$/;"	kind:variable	line:218
+alien_p	../python_hello.py	/^alien_p = [alien_0, alien_1];$/;"	kind:variable	line:215
+b	../python_hello.py	/^b = 0.2 * 5;$/;"	kind:variable	line:32
+b	../python_hello.py	/^b = 2 + 3;$/;"	kind:variable	line:29
+b	../python_hello.py	/^b = 35;$/;"	kind:variable	line:154
+bicycles	../python_hello.py	/^bicycles = ["trek", "cannondale", "redline", "specialized"];$/;"	kind:variable	line:42
+c	../python_hello.py	/^c = 43;$/;"	kind:variable	line:155
+car	../python_hello.py	/^car = "Audi";$/;"	kind:variable	line:148
+cars	../python_hello.py	/^cars = ["audi", "bmw", "subaru", "toyota"];$/;"	kind:variable	line:142
+class_test.py	../class_test.py	1;"	kind:file	line:1
+class_test_matplotlib.py	../class_test_matplotlib.py	1;"	kind:file	line:1
+copy	../python_hello.py	/^copy = abb_assignment[:];$/;"	kind:variable	line:122
+digit	../python_hello.py	/^digit = [];$/;"	kind:variable	line:88
+dimensions	../python_hello.py	/^dimensions = (0, 1, 2);$/;"	kind:variable	line:138
+dimensions	../python_hello.py	/^dimensions = (0, 100, 200);$/;"	kind:variable	line:130
+dog	../python_hello.py	/^dog = Dog("xueqing", 28);$/;"	kind:variable	line:259
+fill_walk	../class_test_matplotlib.py	/^    def fill_walk(self):$/;"	kind:member	line:47
+hello_python	../python_hello.py	/^hello_python = "hello python, this is my hello world";$/;"	kind:variable	line:14
+hello_world	../python_hello.py	/^hello_world = "hello world, this is my hello world";$/;"	kind:variable	line:3
+hello_world	../python_module_test.py	/^def hello_world(name):$/;"	kind:function	line:1
+make_pizza	../python_module_test.py	/^def make_pizza(*toppings):$/;"	kind:function	line:5
+plot_self_list_xy	../class_test_matplotlib.py	/^    def plot_self_list_xy(self):#test matplotlib blue$/;"	kind:member	line:23
+plot_self_list_y	../class_test_matplotlib.py	/^    def plot_self_list_y(self):#test matplotlib red$/;"	kind:member	line:16
+plot_self_scatter	../class_test_matplotlib.py	/^    def plot_self_scatter(self):#test scatter$/;"	kind:member	line:31
+python_hello.py	../python_hello.py	1;"	kind:file	line:1
+python_module_test.py	../python_module_test.py	1;"	kind:file	line:1
+random_walk_init	../class_test_matplotlib.py	/^    def random_walk_init(self, num_points = 100):$/;"	kind:member	line:40
+section	../python_hello.py	/^section = abb_assignment[0:3];$/;"	kind:variable	line:110
+sum	../python_hello.py	/^sum = 0;$/;"	kind:variable	line:87
+test	../python_hello.py	/^test = "\\"hello\\"world"$/;"	kind:variable	line:2
+test	../python_hello.py	/^test = bicycles.pop(3);$/;"	kind:variable	line:62
+test_l	../python_hello.py	/^test_l = [];$/;"	kind:variable	line:175
+test_lstrip	../python_hello.py	/^test_lstrip = "    hello, how are you    ";$/;"	kind:variable	line:21
+test_matplotlib	../python_hello.py	/^test_matplotlib = Matplotlib_test();$/;"	kind:variable	line:266
+test_pygal	../class_test_matplotlib.py	/^    def test_pygal(self, count):$/;"	kind:member	line:74
+test_requests	../class_test_matplotlib.py	/^    def test_requests(self,url):$/;"	kind:member	line:99
+test_rstrip	../python_hello.py	/^test_rstrip = "    hello, how are you   ";$/;"	kind:variable	line:18
+test_strip	../python_hello.py	/^test_strip = "   hello, how are you   ";$/;"	kind:variable	line:24
