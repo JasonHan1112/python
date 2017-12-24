@@ -6,12 +6,23 @@ import urllib.request
 #function
 #################################
 def hello_web():
+    '''
     down_data = urllib.request.urlopen("http://www.baidu.com");
     print("##geturl:\n", down_data.geturl());
     print("##down file info:\n", down_data.info());
     print("##code:\n", down_data.getcode());
     data = down_data.readlines();#list
     print(data[500]);
+    '''
+    #another way to realize 
+    
+    #build opener
+    opener = urllib.request.build_opener();
+    down_data = opener.open("http://www.baidu.com");
+    print("##geturl:\n", down_data.geturl());
+    print("##down file info:\n", down_data.info());
+    print("##code:\n", down_data.getcode());
+
 
 
 def down_file():
@@ -51,7 +62,8 @@ def post_method():
     #req = urllib.request.Request(url, post_data);
     req = urllib.request.Request(url, post_data, method = "POST");
     #construct header for request
-    req.add_header("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0");
+    req.add_header("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; \
+    rv:57.0) Gecko/20100101 Firefox/57.0");
     
     #request post data and get response
     data_response = urllib.request.urlopen(req).read();
@@ -88,7 +100,128 @@ def url_exception():
         print(e.code);
         print(e.reason);
 
+def log_in_without_cookies(url1 = "", url2 = ""):
+    if url1 == "" or url2 =="":
+        print("need a url");
+        return;
 
+    #urlencode and ntf-8 encode
+    post_data = urllib.parse.urlencode({
+        "username":"weisuen",
+        "password":"aA123456"
+    }).encode("utf-8");
+    
+    #construct post request
+    req = urllib.request.Request(url1, post_data);
+    #construct header for request
+    req.add_header("User-Agent", "Mozilla/5.0 (X11; Ubuntu; \
+    Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0");
+
+    #open url and read content
+    data = urllib.request.urlopen(req).read();
+    
+    #write files
+    fhandle = open("log_in_without_cookies1.html", "wb");
+    fhandle.write(data);
+    fhandle.close();
+
+    #construct post request
+    req = urllib.request.Request(url2);
+    #construct header for request
+    req.add_header("User-Agent", "Mozilla/5.0 (X11; Ubuntu; \
+    Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0");
+
+    #open url and read content
+    data = urllib.request.urlopen(req).read();
+    
+    #write files
+    fhandle = open("log_in_without_cookies2.html", "wb");
+    fhandle.write(data);
+
+    fhandle.close();
+    return;
+
+
+import http.cookiejar
+def log_in_with_cookies(url1 = "", url2 = ""):
+    if url1 == "" or url2 =="":
+        print("need a url");
+        return;
+
+    #urlencode and ntf-8 encode
+    post_data = urllib.parse.urlencode({
+        "username":"weisuen",
+        "password":"aA123456"
+    }).encode("utf-8");
+
+    #construct post request
+    req = urllib.request.Request(url1, post_data);
+    #construct header for request
+    req.add_header("User-Agent", "Mozilla/5.0 (X11; Ubuntu; \
+    Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0");
+
+    #use cookiejar
+    cjar = http.cookiejar.CookieJar();
+
+    #construct opener
+    opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cjar));
+
+    #install opener, global opener, after this urlopen() will use this opener
+    urllib.request.install_opener(opener);
+
+    data_save = opener.open(req).read();
+    
+    #write files
+    fhandle = open("log_in_with_cookies1.html", "wb");
+    fhandle.write(data_save);
+    fhandle.close();
+
+    #construct post request
+    req = urllib.request.Request(url2);
+    #construct header for request
+    req.add_header("User-Agent", "Mozilla/5.0 (X11; Ubuntu; \
+    Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0");
+
+    #open url and read content
+    data = urllib.request.urlopen(req).read();
+    
+    #write files
+    fhandle = open("log_in_with_cookies2.html", "wb");
+    fhandle.write(data);
+
+    fhandle.close();
+
+
+
+import re;
+def spider_actual_combat(url, page):
+    if url == "":
+        print("need a url");
+        return;
+    headers = ("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0");
+    opener = urllib.request.build_opener();
+    opener.addheaders = [headers];
+    html1 = opener.open(url).read();
+    
+    pattern1 = '<img width="200" height="200" class="err-product" data-img="1" src="//(.+?\.jpg)';
+    html1 = str(html1);
+    result1 = re.compile(pattern1).findall(html1);
+    #print(result1);
+    i = 0;
+    for image in result1:
+        image_name = "./jd_download_jpg/jd_linux"+str(page)+"_"+str(i)+".jpg";
+        image_url = "http://"+image;
+        print(image_url);
+        try:
+            urllib.request.urlretrieve(image_url, filename=image_name);
+        except urllib.error.URLError as e:
+            if hasattr(e, "code"):
+                i += 1;
+            if hasattr(e, "reason"):
+                i += 1;
+        i += 1;
+    
+    
 
 
 
@@ -122,6 +255,27 @@ print(len(data));
 
 #debug_log_test();
 
-url_exception();
+#url_exception();
+
+#without cookies
+'''
+url1_login_without_cookies = "http://bbs.chinaunix.net/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=LtxBx";
+url2_login_without_cookies = "http://bbs.chinaunix.net/"
+
+#url2_login_without_cookies.html still display need login
+log_in_without_cookies(url1_login_without_cookies, url2_login_without_cookies);
+'''
+
+'''
+#with cookies
+url1_login_with_cookies = "http://bbs.chinaunix.net/member.php?mod=logging&action=login&loginsubmit=yes&loginhash=LtxBx";
+url2_login_with_cookies = "http://bbs.chinaunix.net/"
+
+#url2_login_with_cookies.html still display need login
+log_in_with_cookies(url1_login_with_cookies, url2_login_with_cookies);
+'''
+for i in range(1, 50):
+    url = 'https://search.jd.com/Search?keyword=linux&enc=utf-8&qrst=1&rt=1&stop=1&vt=2&wq=linux&page='+str(i);
+    spider_actual_combat(url, i);
 
 
