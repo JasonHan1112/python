@@ -1,0 +1,75 @@
+register :DEVICE_CAP do
+    description ""
+	map to:  :cfgdecp, at: pcie_cap_base + 0x4
+	width 32
+	field :MAX_PAYLOAD_SUPPORT, [2..0] , R do
+	    description ""
+		enum [0, "128 Byte]
+		     [1, "256 Byte"]
+	    ###reset 0
+	end
+	field :PHANTOM_FUNC, [4..3] , R do
+	    description ""
+		enum "No Phantom Functions",
+		     "1 Phantom Function",
+	    fixed at: 0
+	end
+	field :EXTENDED_TAG, [] , R do
+	    description ""
+		enum "5-bit"
+		     "8-bit"
+	    fixed at: 1
+	end
+	...
+end
+
+register :ROM_BASE_ADDR do
+    description ::
+	implement_ref :""
+	map to:  :cfgdecp, at: 0x38
+	width 32
+	field :BASE_ADDR, [31..0] do
+	    description "Expansion ROM BASE address Register"
+		fixed at: 0
+	end
+end
+
+register :PCIE_RX_CNTL3 do
+    description ""
+	map to:  :pciedir_p, at: 0x1d0
+	map to:  :pcieind_p, at: 0x74
+	width 32
+	field :RX_IGNORE_RC_TRANSMRDPASID_UR, [0]  do
+	    description ""
+		enum ""
+		     ""
+	    reset 0
+	end
+	field :RX_IGNORE_RC_TRANSMWRPASID_UR, [1] do
+	    description ""
+		enum "report ..."
+		     "ignore"
+		reset 0
+	end
+    ....
+end
+
+register :MARGINING_PORT_CAP do
+    description ""
+	implement_ref :"" do
+	    custom_logic DECODE
+	end
+	map to:    :cfgdecp, at: margn_ecap_base + 0x4
+	width 16
+	field :MARGINING_USES_SOFTWARE, [0] , R do    # HwInit
+	    description ""
+	    implement_ref :"" do
+	        custom_logic DECODE
+	    end
+	    enum "software not Required"
+	         "software required"
+	    reset 0
+	end
+	...
+end
+
