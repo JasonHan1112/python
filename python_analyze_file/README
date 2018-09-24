@@ -1,3 +1,7 @@
+this is for analyze file 
+
+
+analyze xxx.rdl
 1.read line one by one 
     1. when encounter "register :" follow must be done://need reg end flag
         1. record word between "register :" and " "
