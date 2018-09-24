@@ -1,0 +1,10 @@
+1.read line one by one 
+    1. when encounter "register :" follow must be done://need reg end flag
+        1. record word between "register :" and " "
+	    2. record word after "width "
+	    3. record word between "map to:  :xxx, at: "
+	2. when encounter "field :" follow must be done://need filed end flag 
+	    1. record word between "field :" and  ","
+		2. record word between "[" and "]"
+		3. record word between "," and "do" not " "//"R" or " "
+		4. record word after "reset" or "fixed at: "
