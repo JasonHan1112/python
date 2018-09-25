@@ -14,7 +14,7 @@ register :DEVICE_CAP do
 		     "1 Phantom Function",
 	    fixed at: 0
 	end
-	field :EXTENDED_TAG, [] , R do
+	field :EXTENDED_TAG, [5] , R do
 	    description ""
 		enum "5-bit"
 		     "8-bit"
@@ -36,8 +36,7 @@ end
 
 register :PCIE_RX_CNTL3 do
     description ""
-	map to:  :pciedir_p, at: 0x1d0
-	map to:  :pcieind_p, at: 0x74
+	map to:  :cfgdecp, at: 0x1d0
 	width 32
 	field :RX_IGNORE_RC_TRANSMRDPASID_UR, [0]  do
 	    description ""
@@ -59,7 +58,7 @@ register :MARGINING_PORT_CAP do
 	implement_ref :"" do
 	    custom_logic DECODE
 	end
-	map to:    :cfgdecp, at: margn_ecap_base + 0x4
+	map to:  :cfgdecp, at: margn_ecap_base + 0x4
 	width 16
 	field :MARGINING_USES_SOFTWARE, [0] , R do    # HwInit
 	    description ""
