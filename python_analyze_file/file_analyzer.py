@@ -123,7 +123,7 @@ def analyzer_lines_get_field_size(line, field_keylist, list_out):
         val_s = line[line.find("[")+1];
         val_e = line[line.find("]")-1];
         field_size = int(val_s) - int(val_e) + 1;
-        print(line);
+        #print(line);
     else:
         field_size = 1;
 
@@ -147,7 +147,18 @@ def analyzer_lines_get_filed_offset(line, field_keylist, list_out):
       
 #analyzer rdl get field data
 def analyzer_lines_get_field_data(line, field_keylist, list_out):
-    nop();
+    
+    val0 = get_words_after(line, "fixed at: ");
+    val1 = get_words_after(line, "reset ");
+
+    if(val0 != -1):
+        list_out.append(val0);
+    if(val1 != -1):
+        list_out.append(val1);
+    if((val1 == -1) and (val0 == -1)):
+        return -1;
+
+    return 0;  
 
 
 '''
@@ -187,7 +198,6 @@ def analyzer_lines_rdl(lines, list_out):
     sub_reg_info = [];
     reg_keylist = ["register :", " ", "map to:  :cfgdecp, at: ", "width "];
     field_keylist = ["field :", ",", "]", "do", "[", "]", "fixed at: "];
-    reg_cur_list = [];#record current reg info
     
     for line in lines:
         
@@ -221,7 +231,7 @@ def analyzer_lines_rdl(lines, list_out):
             if(val3 != -1):
                 list_out.append(sub_reg_info);
                 list_out.append(val3);
-                reg_flag = 4;#get filed_name in the same line
+                reg_flag = 4;#get field size ,filed_name in the same line
         
         if(reg_flag == 4):
             #get field size
@@ -238,13 +248,28 @@ def analyzer_lines_rdl(lines, list_out):
             #get attr
             analyzer_lines_get_field_attr(line, field_keylist, list_out);
             reg_flag = 7;#change attr in the next
+
         if(reg_flag == 7):
             #change attr in the next lines
             analyzer_lines_change_field_attr(line, field_keylist, list_out);
             reg_flag = 8;#get field data
+            continue;
 
+        if(reg_flag == 8):
+            #get data
+            ret = analyzer_lines_get_field_data(line, field_keylist, list_out);
+            if(ret != -1):#current line find field data
 
+                reg_flag = 9;#find "end"
+                continue;
+            else:#find field data
+                reg_flag = 8;#find field data
+                continue;
 
+        if(reg_flag == 9):
+            if(line.find("end") != -1):
+                reg_flag = 3;
+                continue;
     return;
 
 

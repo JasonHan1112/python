@@ -6,7 +6,7 @@ register :DEVICE_CAP do
 	    description ""
 		enum [0, "128 Byte]
 		     [1, "256 Byte"]
-	    ###reset 0
+	    reset 0
 	end
 	field :PHANTOM_FUNC, [4..3] , R do
 	    description ""
