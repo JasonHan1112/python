@@ -20,7 +20,7 @@ register :DEVICE_CAP do
 		     "8-bit"
 	    fixed at: 1
 	end
-	...
+	
 end
 
 register :ROM_BASE_ADDR do
@@ -50,21 +50,18 @@ register :PCIE_RX_CNTL3 do
 		     "ignore"
 		reset 0
 	end
-    ....
 end
 
 register :MARGINING_PORT_CAP do
     description ""
 	implement_ref :"" do
 	    custom_logic DECODE
-	end
 	map to:  :cfgdecp, at: margn_ecap_base + 0x4
 	width 16
 	field :MARGINING_USES_SOFTWARE, [0] , R do    # HwInit
 	    description ""
 	    implement_ref :"" do
 	        custom_logic DECODE
-	    end
 	    enum "software not Required"
 	         "software required"
 	    reset 0

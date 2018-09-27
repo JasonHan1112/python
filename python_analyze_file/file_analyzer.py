@@ -120,8 +120,8 @@ def analyzer_lines_get_field_size(line, field_keylist, list_out):
         return -1;
 
     if(line.find("..") != -1):
-        val_s = line[line.find("[")+1];
-        val_e = line[line.find("]")-1];
+        val_s = get_words_between(line, "[", ".");
+        val_e = get_words_between(line, "..", "]"); 
         field_size = int(val_s) - int(val_e) + 1;
         #print(line);
     else:
@@ -140,9 +140,10 @@ def analyzer_lines_get_filed_offset(line, field_keylist, list_out):
     if((val0 ==-1) or (val1 == -1)):
         print("field offset error!!!");
         return -1;
-
-    val_offset = int(line[line.find("]") - 1]);
-      
+    if(line.find("..") != -1):
+        val_offset = int(get_words_between(line, "..", "]")); 
+    else:
+        val_offset = int(get_words_between(line, "[", "]"));
     list_out.append(val_offset);
       
 #analyzer rdl get field data
@@ -191,22 +192,39 @@ def analyzer_lines_field_region(line, field_keylist, reg_cur_list, list_out):
 '''
 #analyzer rdl file lines 
 def analyzer_lines_rdl(lines, list_out):
+    
+    reg_end = 0;#record the reg "end"
+    field_end = 0;#record the field "end"
 
-    field_flag = 0;
-    reg_flag = 0;
-    line_num = 0;
+    reg_flag = 0;#switch machine
+
     sub_reg_info = [];
     reg_keylist = ["register :", " ", "map to:  :cfgdecp, at: ", "width "];
     field_keylist = ["field :", ",", "]", "do", "[", "]", "fixed at: "];
     
     for line in lines:
+
+        if(line.find("end") != -1):
+            if(reg_end and (field_end != 1)):
+                reg_flag = 0;#analyze reg
+                sub_reg_info.clear();#clear last reg_info
+                reg_end = 0;
+                print("reg end");
+            if(field_end):
+                reg_flag = 3;#analyze field
+                field_end = 0;
+                print("field end");
+            
         
         if(reg_flag == 0):
             #get reg_name
-            val0 = get_words_between(line, reg_keylist[0], reg_keylist[1]);
+            val0 = get_words_between(line, reg_keylist[0], \
+                reg_keylist[1]);
             if(val0 != -1):
                 sub_reg_info.append(val0);
                 reg_flag = 1;#get reg offset
+                reg_end = 1;#wait for reg end
+                print("reg_name");
                 continue;
     
         if(reg_flag == 1):
@@ -215,6 +233,7 @@ def analyzer_lines_rdl(lines, list_out):
             if(val1 != -1):
                 sub_reg_info.append(val1);
                 reg_flag = 2;#get reg width
+                print("reg_offset");
                 continue;
         
         if(reg_flag == 2):
@@ -223,53 +242,59 @@ def analyzer_lines_rdl(lines, list_out):
             if(val2 != -1):
                 sub_reg_info.append(val2);
                 reg_flag = 3;#get field name
+                print("reg_width");
                 continue;
         
         if(reg_flag == 3):
             #get field_name
-            val3 = get_words_between(line, field_keylist[0], field_keylist[1]);
+            val3 = get_words_between(line, field_keylist[0], \
+                field_keylist[1]);
             if(val3 != -1):
-                list_out.append(sub_reg_info);
+                list_out.append(sub_reg_info[0]);
+                list_out.append(sub_reg_info[1]);
+                list_out.append(sub_reg_info[2]);
                 list_out.append(val3);
+                field_end = 1;#wait for field end
                 reg_flag = 4;#get field size ,filed_name in the same line
+                print("field_name");
         
         if(reg_flag == 4):
             #get field size
-            analyzer_lines_get_field_size(line, field_keylist, list_out);
+            analyzer_lines_get_field_size(line, field_keylist, \
+                list_out);
             reg_flag = 5;#get field off in the same line
 
         if(reg_flag == 5):
             #get field offset
-            analyzer_lines_get_filed_offset(line, field_keylist, list_out);
+            analyzer_lines_get_filed_offset(line, field_keylist, \
+                list_out);
             reg_flag = 6;#get field attr on two lines
 
 
         if(reg_flag == 6):
             #get attr
-            analyzer_lines_get_field_attr(line, field_keylist, list_out);
+            analyzer_lines_get_field_attr(line, field_keylist, \
+                list_out);
             reg_flag = 7;#change attr in the next
 
         if(reg_flag == 7):
             #change attr in the next lines
-            analyzer_lines_change_field_attr(line, field_keylist, list_out);
+            analyzer_lines_change_field_attr(line, field_keylist, \
+                list_out);
             reg_flag = 8;#get field data
             continue;
 
         if(reg_flag == 8):
             #get data
-            ret = analyzer_lines_get_field_data(line, field_keylist, list_out);
-            if(ret != -1):#current line find field data
-
-                reg_flag = 9;#find "end"
-                continue;
-            else:#find field data
+            ret = analyzer_lines_get_field_data(line,\
+                      field_keylist, list_out);
+            if(ret == -1):#current line find field data
                 reg_flag = 8;#find field data
                 continue;
-
-        if(reg_flag == 9):
-            if(line.find("end") != -1):
-                reg_flag = 3;
+            else:
+                reg_flag = 9;#idle state to find end
                 continue;
+
     return;
 
 
